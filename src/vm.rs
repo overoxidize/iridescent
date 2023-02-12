@@ -4,12 +4,12 @@ pub struct VM {
     registers: [i32; 32],
     // Contains a small amount of fast storage, usually
     // indicated by the number of bits they can hold.
-    // A grouping of 32 bits is an instruction, with the first 8 bits.
-    // reserved for the opcode, which stops execution.
     pc: usize,
     // program counter: will track which byte is currently executing
     program: Vec<u8>,
-    remainder: u32,
+    // A series of bytes representing opcodes to be executed as instructions.
+    remainder: u32, 
+    // Stores the potential remainder of DIV opcode executions.
 }
 
 impl VM {
@@ -42,6 +42,12 @@ impl VM {
         }
         match self.decode_opcode() {
             Opcode::LOAD => {
+                // *Assuming LOAD is the first instruction in our program* 
+                // Initially, the program counter is set to 0, targeting the first
+                // byte in the program field on our VM struct.
+                // We call `next_8_bits()`, and increment the program counter,
+                // which we use to index into our program vector, and return the
+                // byte (*the next 8 bits*) containing the address of of the register.
                 let register = self.next_8_bits() as usize;
                 let number = self.next_16_bits() as u32;
                 self.registers[register] = number as i32;
@@ -85,6 +91,14 @@ impl VM {
         result
     }
     fn next_16_bits(&mut self) -> u16 {
+        // Original state of two bytes: a = [x,x,x,x,x,x,x,x], b = [y,y,y,y,y,y,y,y].
+
+        // x as u16 -> [0,0,0,0,0,0,0,0, x,x,x,x,x,x,x,x]
+        // y as u16 -> [0,0,0,0,0,0,0,0, y,y,y,y,y,y,y,y]
+        // x << 8   -> [x,x,x,x,x,x,x,x, 0,0,0,0,0,0,0,0]
+        // v = x | y -> [x,x,x,x,x,x,x,x,y,y,y,y,y,y,y,y]
+        // The pipe (|) is a bitwise or operator, that returns a 1 in each bit 
+        // position for which the associated bits of each operand are 1, else 0.
         let result = ((self.program[self.pc] as u16) << 8) | self.program[self.pc + 1] as u16;
         self.pc += 2;
         return result;

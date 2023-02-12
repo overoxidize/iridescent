@@ -1,13 +1,13 @@
 #[derive(PartialEq)]
 pub enum Opcode {
-    LOAD,
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    HLT,
-    JMP,
-    IGL,
+    LOAD, // LOAD $0 #b: Loads the value of b into register $0.
+    ADD, // ADD $0 $1 $2: Stores the sum of $0 and $1 into register $2.
+    SUB, // SUB $0 $1 $2: Stores the difference of $0 and $1 into register $2.
+    MUL, // MUL $0 $1 $2: Stores the product of $0 and $1 into register $2.
+    DIV, // DIV $0 $1 $2: Stores the product of $0 and $1 into register $2.
+    HLT, // Stops execution of current instruction.
+    JMP, // JMP $0: Sets the program counter to $0, continuing execution from there.
+    IGL, // Sends a request for an interrupt to the processor.
 }
 
 pub struct Instruction {
