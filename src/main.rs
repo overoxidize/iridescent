@@ -1,4 +1,4 @@
-use nom::*;
+#[macro_use]
 pub mod vm;
 pub mod instruction;
 pub mod repl;

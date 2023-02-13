@@ -1,4 +1,7 @@
-use nom::types::CompleteStr;
+#[macro_use]
+use crate::assembler::Token;
+use crate::instruction::Opcode;
+use nom::{named, ws, tag, do_parse, digit, types::CompleteStr};
 
 named!(opcode_load<CompleteStr, Token>,
 
@@ -19,7 +22,7 @@ mod tests {
         assert_eq!(token, Token::Op{code: Opcode::LOAD});
         assert_eq!(rest, CompleteStr(""));
 
-        let result = opcode_load(CompleteStr(oald));
+        let result = opcode_load(CompleteStr("oald"));
         assert_eq!(result.is_ok(), false);
     }
 }
