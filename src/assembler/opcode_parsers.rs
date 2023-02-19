@@ -1,7 +1,6 @@
-#[macro_use]
 use crate::assembler::Token;
 use crate::instruction::Opcode;
-use nom::{named, ws, tag, do_parse, digit, types::CompleteStr};
+use nom::{named, tag, do_parse, types::CompleteStr};
 
 named!(opcode_load<CompleteStr, Token>,
 

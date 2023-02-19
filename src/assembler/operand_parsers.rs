@@ -14,7 +14,6 @@ named!(integer_operand<CompleteStr, Token>,
 
 mod tests {
     use super::*;
-
     #[test]
     fn test_parse_integer_operand() {
         // Test a valid integer operand

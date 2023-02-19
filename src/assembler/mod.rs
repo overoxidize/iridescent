@@ -7,5 +7,6 @@ pub mod register_parsers;
 pub enum Token {
     Op{code: Opcode},
     Register{reg_num: u8},
-    IntegerOperand{value: i32}
+    IntegerOperand{value: i32},
+    Number{value: i32}
 }

@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum Opcode {
     LOAD, // LOAD $0 #b: Loads the value of b into register $0.
     ADD, // ADD $0 $1 $2: Stores the sum of $0 and $1 into register $2.
