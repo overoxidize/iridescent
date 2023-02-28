@@ -6,7 +6,7 @@ pub struct VM {
     // indicated by the number of bits they can hold.
     pc: usize,
     // program counter: will track which byte is currently executing
-    program: Vec<u8>,
+   pub program: Vec<u8>,
     // A series of bytes representing opcodes to be executed as instructions.
     remainder: u32, 
     // Stores the potential remainder of DIV opcode executions.

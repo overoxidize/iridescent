@@ -1,6 +1,8 @@
 use std;
 use std::io;
 use std::io::Write;
+use nom::types::CompleteStr;
+
 use crate::vm::VM;
 
 pub struct REPL {
@@ -45,7 +47,21 @@ impl REPL {
                     }
                 }
                 _ => {
-                    println!("Invalid input");
+                    let parsed_program = self.program(CompleteStr(buffer));
+
+                    if !parsed_program.is_ok() {
+                        println!("Unable to parse input");
+                        continue;
+                    }
+
+                    let (_, result) = parsed_program.unwrap();
+
+                    let bytecode = result.to_bytes();
+
+                    // for byte in bytecode {
+                    //     self.vm.add_byte(byte)
+                    // }
+                    self.vm.run_once();
                 }
             }
         }

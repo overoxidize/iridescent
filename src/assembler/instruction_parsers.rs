@@ -41,7 +41,17 @@ impl AssemblerInstruction {
         Token::Register { reg_num } => {
             results.push(*reg_num);
         }
-        // Token::IntegerOperand { value }
+        Token::IntegerOperand { value } => {
+            let converted = *value as u16;
+            let byte1 = converted;
+            let byte2 = converted >> 8;
+            results.push(byte2 as u8);
+            result.push(byte1 as u8);
+        }
+        _ => {
+            println!("Opcode found in operand field");
+            std::process::exit(1);
+        }
     }        
 
     unimplemented!()
@@ -56,7 +66,7 @@ named!(pub instruction_one<CompleteStr, AssemblerInstruction>,
         integer_op: integer_operand >>
         (
             AssemblerInstruction {
-                opcode: o,
+                opcode: op,
                 operand_1: Some(reg),
                 operand_2: Some(integer_op),
                 operand_3: None
