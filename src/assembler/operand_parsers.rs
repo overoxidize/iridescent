@@ -1,6 +1,6 @@
 use crate::assembler::Token;
 use nom::{named, ws, tag, digit, types::CompleteStr};
-named!(integer_operand<CompleteStr, Token>,
+named!(pub integer_operand<CompleteStr, Token>,
     ws!(
         do_parse!(
             tag!("#") >>

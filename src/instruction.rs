@@ -1,32 +1,64 @@
+/// `instruction` provides the 
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum Opcode {
-    LOAD, // LOAD $0 #b: Loads the value of b into register $0.
-    ADD, // ADD $0 $1 $2: Stores the sum of $0 and $1 into register $2.
-    SUB, // SUB $0 $1 $2: Stores the difference of $0 and $1 into register $2.
-    MUL, // MUL $0 $1 $2: Stores the product of $0 and $1 into register $2.
-    DIV, // DIV $0 $1 $2: Stores the product of $0 and $1 into register $2.
-    HLT, // Stops execution of current instruction.
-    JMP, // JMP $0: Sets the program counter to $0, continuing execution from there.
-    JMPF,// JMPF $0: Sets the program counter to pc + $0, continuing execution from there.
-    JMPB, // JMPB $0: JMPF $0: Sets the program counter to pc - $0, continuing execution from there.
-    EQ, // EQ $0 $1 $2: Compares the values of $0 and $2, setting `VM.equal_flag` to the results of the comparison.
-    NEQ,
+    
+    /// LOAD $0 $1: Loads the value of b into register $0.
+    LOAD, 
+    
+    /// ADD $0 $1 $2: Stores the sum of $0 and $1 into register $2.
+    ADD, 
+    
+    /// SUB $0 $1 $2: Stores the difference of $0 and $1 into register $2.
+    SUB, 
+    
+    /// MUL $0 $1 $2: Stores the product of $0 and $1 into register $2.
+    MUL, 
+    
+    /// DIV $0 $1 $2: Stores the product of $0 and $1 into register $2.
+    DIV, 
+    
+    /// Stops execution of current instruction.
+    HLT, 
+    
+    /// JMP $0: Sets the program counter to $0, continuing execution from there.
+    JMP, 
+    
+    /// JMPF $0: Sets the program counter to pc + $0, continuing execution from there.
+    JMPF,
+    
+    /// JMPB $0: JMPF $0: Sets the program counter to pc - $0, continuing execution from there.
+    JMPB, 
+    
+    /// EQ $0 $1 $2: Compares the values of $0 and $2, setting `VM.equal_flag` to the results of the comparison.
+    EQ, 
+    
+    /// NEQ $0 $1 $2: Compares the values of $0 and $2, setting `VM.equal_flag` to the results of the comparison.
+    NEQ, 
+    
     GT,
+    
     LT,
+    
     GTQ,
+    
     LTQ,
+    
     JEQ,
+    
     JNEQ,
-    IGL, // Sends a request for an interrupt to the processor.
+    
+    /// Sends a request for an interrupt to the processor.
+    IGL, 
 }
 
 pub struct Instruction {
-    // An instruction is a group of 32 bits, the first 8 of which, will be
-    // an opcode, and the remaining ones will be up to three operands.
-    opcode: Opcode
+    /// An instruction is a group of 32 bits, the first 8 of which, will be
+    /// an opcode, and the remaining ones will be up to three operands.
+    pub opcode: Opcode
 }
 
 impl Instruction {
+    /// Returns a new instance of an opcode.
     pub fn new(opcode: Opcode) -> Instruction {
         Instruction {
             opcode: opcode
@@ -35,6 +67,7 @@ impl Instruction {
 }
 
 impl From<u8> for Opcode {
+    /// Allows for Opcode to be understood by the parser as an integer.
     fn from(v: u8) -> Self {
         match v {
             0 => return Opcode::LOAD,

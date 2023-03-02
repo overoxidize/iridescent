@@ -1,9 +1,11 @@
-use assembler::Token;
-use assembler::opcode_parsers::*;
-use assembler::operand_parsers::integer_operand;
-use assembler::register_parsers::register;
+use crate::assembler::Token;
+use crate::assembler::opcode_parsers::*;
+use crate::assembler::operand_parsers::integer_operand;
+use crate::assembler::register_parsers::register;
 use nom::named;
-
+use nom::types::CompleteStr;
+use nom::*;
+#[derive(Debug, PartialEq, Clone)]
 pub struct AssemblerInstruction {
     opcode: Token, 
     operand_1: Option<Token>,
@@ -12,6 +14,7 @@ pub struct AssemblerInstruction {
 }
 
 impl AssemblerInstruction {
+    /// Represents an Opcode instruction in terms of assembly.
     pub fn to_bytes(&self) -> Vec<u8> {
         let mut results = vec![];
         match self.opcode {
@@ -37,6 +40,9 @@ impl AssemblerInstruction {
     }
 
     fn extract_operand(t: &Token, results: &mut Vec<u8>) {
+    
+    /// Extracts a series of bytes representing an operand and adds
+    /// the results to a vector.
     match t {
         Token::Register { reg_num } => {
             results.push(*reg_num);
@@ -46,7 +52,7 @@ impl AssemblerInstruction {
             let byte1 = converted;
             let byte2 = converted >> 8;
             results.push(byte2 as u8);
-            result.push(byte1 as u8);
+            results.push(byte1 as u8);
         }
         _ => {
             println!("Opcode found in operand field");
@@ -54,11 +60,11 @@ impl AssemblerInstruction {
         }
     }        
 
-    unimplemented!()
     }
 
 }
 
+/// Parses instructions of the form LOAD $0 #100.
 named!(pub instruction_one<CompleteStr, AssemblerInstruction>,
     do_parse!(
         op: opcode_load >>
@@ -80,7 +86,7 @@ named!(pub instruction_one<CompleteStr, AssemblerInstruction>,
 mod tests {
     use super::*;
 
-    use assembler::opcode::Opcode;
+    use crate::instruction::Opcode;
 
     #[test]
     fn test_parse_instruction_one() {
@@ -90,8 +96,7 @@ mod tests {
             Ok((
                 CompleteStr(""),
                 AssemblerInstruction {
-                    label: None,
-                    opcode: Token::Opcode { code: Opcode::LOAD},
+                    opcode: Token::Op { code: Opcode::LOAD},
                     operand_1: Some(Token::Register { reg_num: 0}),
                     operand_2: Some(Token::Number { value:  100}),
                     operand_3: None

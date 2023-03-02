@@ -2,7 +2,9 @@ use crate::assembler::Token;
 use crate::instruction::Opcode;
 use nom::{named, tag, do_parse, types::CompleteStr};
 
-named!(opcode_load<CompleteStr, Token>,
+/// opcode parser provides a simple piece of logic to load
+/// various opcodes, to be parsed by nom.
+named!(pub opcode_load<CompleteStr, Token>,
 
     do_parse!(
         tag!("load") >> (Token::Op{code: Opcode::LOAD})

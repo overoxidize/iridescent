@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 #[macro_use]
 pub mod vm;
 pub mod instruction;

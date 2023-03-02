@@ -1,7 +1,9 @@
 use crate::instruction::Opcode;
 #[derive(Debug)]
+
+/// VM provides the ability to instantiate a new VM, via `new`
 pub struct VM {
-    registers: [i32; 32],
+    pub registers: [i32; 32],
     // Contains a small amount of fast storage, usually
     // indicated by the number of bits they can hold.
     pc: usize,
@@ -15,16 +17,23 @@ pub struct VM {
 }
 
 impl VM {
+    /// Returns a new instance of the iridescent VM, with registers, program counter, and remainder register initialized
+    /// to zero.
     pub fn new() -> VM {
         VM {
             registers: [0; 32],
-            program: vec![],
+            program: vec![], // Vector for storing opcode programs.
             pc: 0,
             remainder: 0,
-            equal_flag: false
+            equal_flag: false // Handles results of equality opcodes.
         }
     }
 
+    pub fn add_byte(&mut self, b: u8) {
+        self.program.push(b);
+    }
+
+    /// This function starts the VM, and proceeds to execute available instructions until there are no more left.
     pub fn run(&mut self) {
         let mut is_done = false;
 
@@ -38,9 +47,10 @@ impl VM {
     }
 
     fn execute_instruction(&mut self) -> bool {
+        /// Executes an individual instruction, useful for observing/debugging.
+        /// When this conditional is true, we will have executed all of the
+        /// instructions given in our program.
         if self.pc >= self.program.len() {
-            // When this conditional is true, we will have executed all of the
-            // instructions given in our program.
             return false;
         }
         match self.decode_opcode() {
@@ -64,6 +74,7 @@ impl VM {
 
             }
             Opcode::HLT => {
+                /// Represents a halting instruction, signaling that program execution should cease.
                 println!("HLT Encountered");
                 return false
             }

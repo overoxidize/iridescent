@@ -1,10 +1,12 @@
 use nom::types::CompleteStr;
+use nom::*;
+use crate::assembler::instruction_parsers::{AssemblerInstruction, instruction_one};
 
-use assembler::instruction_parsers::{AssemblerInstruction, instruction_one};
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 
 pub struct Program {
+    /// Represents the program that will be fed into the VM, as a vector
+    /// of Assembler instructions.`
     instructions: Vec<AssemblerInstruction>
 }
 
